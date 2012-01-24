@@ -90,7 +90,7 @@ def bind_method(**config):
             status_code = content_obj['meta']['code']
             if status_code == 200:
                 if not self.objectify_response:
-                    return content_obj, None
+                    return content_obj, None, None
 
                 if self.response_type == 'list':
                     for entry in content_obj['data']:
@@ -105,9 +105,9 @@ def bind_method(**config):
         def _paginator_with_url(self, url, method="GET", body=None, headers={}):
             pages_read = 0
             while url and pages_read < self.max_pages:
-                 response_objects, url = self._do_api_request(url, method, body, headers)
+                 response_objects, url, next_min_id = self._do_api_request(url, method, body, headers)
                  pages_read += 1
-                 yield response_objects, url 
+                 yield response_objects, url, next_min_id
             return
 
         def execute(self):
